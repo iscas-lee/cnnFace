@@ -1,30 +1,32 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <opencv2/opencv.hpp> 
 
 #include "cnn.h"
 
+using namespace std;
+using namespace cv;
+
 class cnnFace{
 public:
-	cnnFace(const float* faceData1, const float* faceData2, const char* modelPath):
+	cnnFace(Mat &faceData1, Mat &faceData2, const char* modelPath, const int layerNum):
 		_faceData1(faceData1),
 		_faceData2(faceData2),
-		_modelPath(modelPath) {};
+		_modelPath(modelPath),
+	    _layerNum(layerNum) {};
 
-	~cnnFace() {
-		if (_faceData1 != NULL)
-			delete _faceData1;
-		if (_faceData2 != NULL)
-			delete _faceData2;
-	};
+	~cnnFace() {};
 	
-	int cnnInit();
+	int cnnFaceInit();
 	int faceVerification();
 
 private:
-	const float* _faceData1;
-	const float* _faceData2;
+	const Mat _faceData1;
+	const Mat _faceData2;
 	const char* _modelPath;
+	const int _layerNum;
 
+	Net cnnFaceNet;
 	float score;
 
 };

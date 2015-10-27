@@ -19,19 +19,19 @@ int cnnFace::cnnFaceInit() {
 	return ret;
 }
 
-int cnnFace::faceVerification() {
+int cnnFace::faceVerification(Mat &faceData1, Mat &faceData2) {
 
 	Blob * blob;
 
 	// 1st image processing
-	int w1 = _faceData1.rows;
-	int h1 = _faceData1.cols;
-	int c1 = _faceData1.channels();
+	int w1 = faceData1.rows;
+	int h1 = faceData1.cols;
+	int c1 = faceData1.channels();
 	int cnt1 = w1 * h1 * c1;
 	float* data1 = (float *)malloc(cnt1 * sizeof(float));
 
 	for (int i = 0; i < cnt1; i++) {
-		data1[i] = static_cast<float>(_faceData1.data[i]) / 255.0;
+		data1[i] = static_cast<float>(faceData1.data[i]) / 255.0;
 	}
 
 	if ( _cnnFaceNet.TakeInput(data1, h1, w1, c1) != 0) {
@@ -50,14 +50,14 @@ int cnnFace::faceVerification() {
 	}
 
 	// 2nd image processing
-	int w2 = _faceData2.rows;
-	int h2 = _faceData2.cols;
-	int c2 = _faceData2.channels();
+	int w2 = faceData2.rows;
+	int h2 = faceData2.cols;
+	int c2 = faceData2.channels();
 	int cnt2 = w2 * h2 * c2;
 	float* data2 = (float *)malloc(cnt2 * sizeof(float));
 
 	for (int i = 0; i < cnt2; i++) {
-		data2[i] = static_cast<float>(_faceData2.data[i]) / 255.0;
+		data2[i] = static_cast<float>(faceData2.data[i]) / 255.0;
 	}
 
 	if ( _cnnFaceNet.TakeInput(data2, h2, w2, c2) != 0) {

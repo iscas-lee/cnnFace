@@ -1,3 +1,6 @@
+#ifndef _CNN_FACE_H
+#define _CNN_FACE_H
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <opencv2/opencv.hpp> 
@@ -9,9 +12,7 @@ using namespace cv;
 
 class cnnFace{
 public:
-	cnnFace(Mat &faceData1, Mat &faceData2, const char* modelPath, const int layerIdx):
-		_faceData1(faceData1),
-		_faceData2(faceData2),
+	cnnFace(const char* modelPath, const int layerIdx):
 		_modelPath(modelPath),
 	    _layerIdx(layerIdx) {};
 
@@ -20,16 +21,15 @@ public:
 	};
 	
 	int cnnFaceInit();
-	int faceVerification();
+	int faceVerification(Mat &faceData1, Mat &faceData2);
 	float getScore() {return _score; }
 
 private:
-	const Mat _faceData1;
-	const Mat _faceData2;
 	const char* _modelPath;
 	const int _layerIdx;
 
 	Net _cnnFaceNet;
 	float _score;
-
 };
+
+#endif

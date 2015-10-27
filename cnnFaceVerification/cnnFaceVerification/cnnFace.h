@@ -15,10 +15,13 @@ public:
 		_modelPath(modelPath),
 	    _layerNum(layerNum) {};
 
-	~cnnFace() {};
+	~cnnFace() {
+		_cnnFaceNet.~Net();
+	};
 	
 	int cnnFaceInit();
 	int faceVerification();
+	float getScore() {return _score; }
 
 private:
 	const Mat _faceData1;
@@ -26,7 +29,7 @@ private:
 	const char* _modelPath;
 	const int _layerNum;
 
-	Net cnnFaceNet;
-	float score;
+	Net _cnnFaceNet;
+	float _score;
 
 };

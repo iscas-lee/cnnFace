@@ -12,24 +12,26 @@ using namespace cv;
 
 class cnnFace{
 public:
-	cnnFace(const char* modelPath, const int layerIdx):
+	cnnFace(const char* modelPath, const int layerIdx, const int len):
 		_modelPath(modelPath),
-	    _layerIdx(layerIdx) {};
+	    _layerIdx(layerIdx), 
+	    _len(len){};
 
 	~cnnFace() {
 		_cnnFaceNet.~Net();
 	};
 	
 	int cnnFaceInit();
-	int faceVerification(Mat &faceData1, Mat &faceData2);
-	float getScore() {return _score; }
-
+	int getFeature(Mat &faceImg, float* feat);
+	float getScore(float* feat1, float* feat2);
+	//int faceVerification(Mat &faceData1, Mat &faceData2);
+	
 private:
 	const char* _modelPath;
 	const int _layerIdx;
-
+	
+	int _len;
 	Net _cnnFaceNet;
-	float _score;
+	
 };
-
 #endif

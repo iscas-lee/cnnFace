@@ -19,10 +19,50 @@ int cnnFace::cnnFaceInit() {
 	return ret;
 }
 
-int cnnFace::faceVerification(Mat &faceData1, Mat &faceData2) {
+int cnnFace::getFeature(Mat &faceImg, float* feat) {
+	Blob * blob;
+	int w = faceImg.rows;
+	int h = faceImg.cols;
+	int c = faceImg.channels();
+	int cnt = w * h * c;
+
+	float* data = (float *)malloc(cnt * sizeof(float));
+	for (int i = 0; i < cnt; i++) {
+		data[i] = static_cast<float>(faceImg.data[i]) / 255.0;
+	}
+
+	if ( _cnnFaceNet.TakeInput(data, h, w, c) != 0) {
+		cout << "[Error] CNN input error for the image!\n";
+		return -1;
+	}
+	_cnnFaceNet.Forward();
+	blob = _cnnFaceNet.get_blob(_layerIdx);
+
+	for (int i =0; i < _len; i++) {
+		feat[i] = blob->data[i];
+	}
+
+	free(data);
+	data = NULL;
+	return 0;
+}
+
+float cnnFace::getScore(float* feat1, float* feat2) {
+	float dotProduct = 0.0;
+	float norm1 = 0.0;
+	float norm2 = 0.0;
+
+	for (int i = 0; i < _len; i++) {
+		dotProduct += feat1[i] * feat2[i];
+		norm1 += feat1[i] * feat1[i];
+		norm2 += feat2[i] * feat2[i];
+	}
+	return dotProduct / sqrt(norm1) / sqrt(norm2);
+}
+
+/*int cnnFace::faceVerification(Mat &faceData1, Mat &faceData2) {
 
 	Blob * blob;
-
 	// 1st image processing
 	int w1 = faceData1.rows;
 	int h1 = faceData1.cols;
@@ -89,4 +129,4 @@ int cnnFace::faceVerification(Mat &faceData1, Mat &faceData2) {
 	_score = dotProduct / sqrt(norm1 * norm2);
 
 	return 0;
-}
+}*/

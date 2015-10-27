@@ -9,11 +9,11 @@ using namespace cv;
 
 class cnnFace{
 public:
-	cnnFace(Mat &faceData1, Mat &faceData2, const char* modelPath, const int layerNum):
+	cnnFace(Mat &faceData1, Mat &faceData2, const char* modelPath, const int layerIdx):
 		_faceData1(faceData1),
 		_faceData2(faceData2),
 		_modelPath(modelPath),
-	    _layerNum(layerNum) {};
+	    _layerIdx(layerIdx) {};
 
 	~cnnFace() {
 		_cnnFaceNet.~Net();
@@ -27,7 +27,7 @@ private:
 	const Mat _faceData1;
 	const Mat _faceData2;
 	const char* _modelPath;
-	const int _layerNum;
+	const int _layerIdx;
 
 	Net _cnnFaceNet;
 	float _score;

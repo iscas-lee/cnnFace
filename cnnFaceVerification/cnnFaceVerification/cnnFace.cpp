@@ -39,7 +39,7 @@ int cnnFace::faceVerification() {
 		return -1;
 	}
 	_cnnFaceNet.Forward();
-	blob = _cnnFaceNet.get_blob(_layerNum);
+	blob = _cnnFaceNet.get_blob(_layerIdx);
 
 	int len1 = blob->count;
 	float norm1 = 0.0;
@@ -65,7 +65,7 @@ int cnnFace::faceVerification() {
 		return -1;
 	}
 	_cnnFaceNet.Forward();
-	blob = _cnnFaceNet.get_blob(_layerNum);
+	blob = _cnnFaceNet.get_blob(_layerIdx);
 
 	int len2 = blob->count;
 	float norm2 = 0.0;

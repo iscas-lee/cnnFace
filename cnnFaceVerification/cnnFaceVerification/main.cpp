@@ -7,14 +7,22 @@
 
 #include "cnnFace.h"
 
+#define _MAX_LEN 1024
+
 using namespace std;
 using namespace cv;
 
-void main(int argc, char* argv)
+void main(int argc, char* argv[])
 {
-	Mat imgFace1 = imread("D:\\test\\Aaron_Peirsol_0002.bmp", CV_LOAD_IMAGE_GRAYSCALE);
-	Mat imgFace2 = imread("D:\\test\\Aaron_Peirsol_0003.bmp", CV_LOAD_IMAGE_GRAYSCALE);
-	char* modelPath = "D:\\code\\cnnFace\\model\\cnnFace.bin";
+	char *filename1 = (char *)malloc(_MAX_LEN*sizeof(char));
+	char *filename2 = (char *)malloc(_MAX_LEN*sizeof(char));
+	char *modelPath  = (char *)malloc(_MAX_LEN*sizeof(char));
+	filename1 = argv[1];
+	filename2 = argv[2];
+	modelPath = argv[3];
+	
+	Mat imgFace1 = imread(filename1, CV_LOAD_IMAGE_GRAYSCALE);
+	Mat imgFace2 = imread(filename2, CV_LOAD_IMAGE_GRAYSCALE);
 	const int layerIdx = 44;
 	const int len = 256;
 

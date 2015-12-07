@@ -1,6 +1,12 @@
 #ifndef _CNN_FACE_H
 #define _CNN_FACE_H
 
+#define _DLL_COMPILE
+
+#ifdef _DLL_COMPILE
+#define testAPI extern "C" _declspec(dllexport)
+#endif
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <opencv2/opencv.hpp> 
@@ -23,8 +29,9 @@ public:
 	
 	int cnnFaceInit();
 	int getFeature(Mat &faceImg, float* feat);
+	int getFeature(float *faceImg, float* feat, int w, int h, int c);
 	float getScore(float* feat1, float* feat2);
-	//int faceVerification(Mat &faceData1, Mat &faceData2);
+	//float faceVerification(Mat &faceData1, Mat &faceData2, char* modelPath);
 	
 private:
 	const char* _modelPath;
@@ -32,6 +39,5 @@ private:
 	
 	int _len;
 	Net _cnnFaceNet;
-	
 };
 #endif

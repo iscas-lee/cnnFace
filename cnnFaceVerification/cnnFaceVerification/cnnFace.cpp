@@ -21,8 +21,8 @@ int cnnFace::cnnFaceInit() {
 
 int cnnFace::getFeature(Mat &faceImg, float* feat) {
 	Blob * blob;
-	int w = faceImg.rows;
-	int h = faceImg.cols;
+	int w = faceImg.cols;
+	int h = faceImg.rows;
 	int c = faceImg.channels();
 	int cnt = w * h * c;
 
@@ -31,8 +31,10 @@ int cnnFace::getFeature(Mat &faceImg, float* feat) {
 		data[i] = static_cast<float>(faceImg.data[i]) / 255.0;
 	}
 
-	if ( _cnnFaceNet.TakeInput(data, h, w, c) != 0) {
-		cout << "[Error] CNN input error for the image!\n";
+	int ret = _cnnFaceNet.TakeInput(data, h, w, c);
+
+	if ( ret != 0) {
+		cout << "[Error "<< ret <<" ] CNN input error for the image!\n";
 		return -1;
 	}
 	_cnnFaceNet.Forward();
@@ -44,6 +46,30 @@ int cnnFace::getFeature(Mat &faceImg, float* feat) {
 
 	free(data);
 	data = NULL;
+	return 0;
+}
+
+
+int cnnFace::getFeature(float *faceImg, float* feat, int w, int h, int c) {
+	Blob * blob;
+
+	//float* data = (float *)malloc(cnt * sizeof(float));
+	/*for (int i = 0; i < cnt; i++) {
+		data[i] = static_cast<float>(faceImg.data[i]) / 255.0;
+	}*/
+
+	int ret = _cnnFaceNet.TakeInput(faceImg, h, w, c);
+
+	if ( ret != 0) {
+		cout << "[Error "<< ret <<" ] CNN input error for the image!\n";
+		return -1;
+	}
+	_cnnFaceNet.Forward();
+	blob = _cnnFaceNet.get_blob(_layerIdx);
+
+	for (int i =0; i < _len; i++) {
+		feat[i] = blob->data[i];
+	}
 	return 0;
 }
 
